@@ -1,0 +1,8 @@
+com/rest/addressbook/resources/ContactsResource.class
+entities/User.class
+com/rest/addressbook/services/AddressBookService.class
+entities/Contact.class
+com/rest/addressbook/resources/UserResource.class
+com/rest/addressbook/services/AddressBookServiceImpl.class
+com/rest/addressbook/resources/NumberResource.class
+com/rest/adressbook/utils/AddressbookUtils.class
