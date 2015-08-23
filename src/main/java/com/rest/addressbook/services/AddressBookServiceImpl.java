@@ -3,6 +3,8 @@ package com.rest.addressbook.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -66,9 +68,22 @@ public class AddressBookServiceImpl implements AddressBookService {
 		return null;
 	}
 
-	public List<Contact> getContactsByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getContactsByUserId(String userId) {
+		List<Contact> contactList = null;
+		boolean userFound = false;
+		for (User user: userList) {
+			if (userId.equals(user.getUserId())) {
+				contactList = user.getContactList();
+				userFound = true;
+			}
+		}
+		if (userFound){
+			return gson.toJson(contactList);
+		}
+		else {
+			return ("labbheya nai").toString();
+		}
+		
 	}
 
 	public String getAllContacts() {

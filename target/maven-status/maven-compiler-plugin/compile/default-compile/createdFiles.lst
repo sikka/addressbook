@@ -1,4 +1,4 @@
-com/rest/addressbook/resources/ContactsResource.class
+com/rest/addressbook/resources/UsersResource.class
 entities/User.class
 com/rest/addressbook/services/AddressBookService.class
 entities/Contact.class

@@ -8,5 +8,5 @@ import entities.User;
 public interface AddressBookService {
 	String getAllContacts();
 	Contact findContactByContactId(String contactId);
-	List<Contact> getContactsByUserId(String userId);
+	String getContactsByUserId(String userId);
 }
