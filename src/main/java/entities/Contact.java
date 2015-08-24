@@ -18,6 +18,9 @@ public class Contact {
 		this.residenceAddress = residenceAddress;
 		this.contactId = AddressbookUtils.getUniqueId();
 	}
+	public Contact(Contact contact) {
+		this(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber(), contact.getEmailAddress(), contact.getResidenceAddress());
+	}
 	public String getFullName() {
 		return firstName+" "+lastName;
 	}

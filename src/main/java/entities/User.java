@@ -1,5 +1,6 @@
 package entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.rest.adressbook.utils.AddressbookUtils;
@@ -12,6 +13,16 @@ public class User {
 	public User(String userName) {
 		this.userName = userName;
 		this.userId = AddressbookUtils.getUniqueId();
+	}
+	public User(User user) {
+		this(user.userName);
+		List<Contact> contactList = new ArrayList<Contact>();
+		// we want the contact ids to be different for the new list.
+		// also, single list cannot be the contact list of multiple users.
+		for (Contact contact: user.getContactList()) {
+			contactList.add(new Contact(contact));
+		}
+		this.setContactList(contactList);
 	}
 	public String getUserName() {
 		return userName;
