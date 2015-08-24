@@ -9,4 +9,7 @@ public interface AddressBookService {
 	String getUserDetails(String id);
 	String createUserContact(String id, String json);
 	String createUser(String json);
+	String createOrModifyUserContact(String userId, String json);
+	void deleteUser(String userId);
+	void deleteUserContact(String userId, String contactId);
 }

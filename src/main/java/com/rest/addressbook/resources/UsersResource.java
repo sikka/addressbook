@@ -1,8 +1,10 @@
 package com.rest.addressbook.resources;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 
 import com.rest.addressbook.services.AddressBookService;
 import com.rest.addressbook.services.AddressBookServiceImpl;
-import com.rest.addressbook.services.UserNotFoundException;
 
 @Path("/v1/users/")
 public class UsersResource {
@@ -39,14 +40,8 @@ public class UsersResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserDetails(@PathParam("id") String id) {
 		String userDetails = svc.getUserDetails(id);
-		try{
-			Response response =  Response.ok(userDetails, MediaType.APPLICATION_JSON).build();
-			return response;
-		}
-		catch (UserNotFoundException ex) {
-			System.out.println("Exception caught");
-			return Response.status(Status.NOT_FOUND).entity("User id "+id+" does not exist").build();
-		}
+		Response response =  Response.ok(userDetails, MediaType.APPLICATION_JSON).build();
+		return response;
 	}
 	
 	@GET
@@ -65,10 +60,35 @@ public class UsersResource {
 	@POST
 	@Path("{id: \\d+}/contacts")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createContactsForUser(@PathParam("id") String id, String json) {
+	public Response createContactsForUser(@PathParam("id") String userId, String json) {
 		//String userId = srv.createUserContactList
-		String contactId = svc.createUserContact(id, json);
+		String contactId = svc.createUserContact(userId, json);
 		return Response.status(Status.CREATED).entity("created the user. Id assigned to the contact is "+contactId).build();
+	}
+	
+	@PUT
+	@Path("{id: \\d+}/contacts")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createOrModifyUserContacts(@PathParam("id") String userId, String json) {
+		String contactJson = svc.createOrModifyUserContact(userId, json);
+		return Response.ok(contactJson, MediaType.APPLICATION_JSON).build();
+	}
+	
+	@DELETE
+	@Path("{id: \\d+}")
+	public Response deleteUser(@PathParam("id") String userId) {
+		svc.deleteUser(userId);
+		return Response.ok("Deleted successfully").build();
+	}
+	
+	@DELETE
+	@Path("{id: \\d+}/contacts/{contactId: \\d+}")
+	public Response deleteUserContact(@Context UriInfo info) {
+		String userId = info.getPathParameters().getFirst("id");
+		String contactId = info.getPathParameters().getFirst("contactId");
+		svc.deleteUserContact(userId, contactId);
+		return Response.ok("Deleted successfully").build();
 	}
 	
 }

@@ -21,6 +21,12 @@ public class Contact {
 	public Contact(Contact contact) {
 		this(contact.getFirstName(), contact.getLastName(), contact.getPhoneNumber(), contact.getEmailAddress(), contact.getResidenceAddress());
 	}
+	public Contact(Contact contact, String contactId) {
+		this(contact);
+		this.setContactId(contactId);
+		System.out.println("contactId passed::"+contactId);
+		System.out.println("contactId after set ::"+this.getContactId());
+	}
 	public String getFullName() {
 		return firstName+" "+lastName;
 	}

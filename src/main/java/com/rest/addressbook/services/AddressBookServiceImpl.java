@@ -128,4 +128,58 @@ public class AddressBookServiceImpl implements AddressBookService {
 		userList.add(user);
 		return user.getUserId();
 	}
+
+	@Override
+	public String createOrModifyUserContact(String userId, String json) {
+		String contactId = gson.fromJson(json, Contact.class).getContactId();
+		Contact contact = new Contact(gson.fromJson(json, Contact.class), contactId);
+		System.out.println("ContactID is "+contact.getContactId());
+		Contact newContact = null;
+		for (User user : userList) {
+			if (user.getUserId().equals(userId)) {
+				List<Contact> contacts = user.getContactList();
+				for (Contact c : contacts) {
+					if (c.getContactId().equals(contact.getContactId())) {
+						contacts.remove(c);
+						newContact = new Contact(contact, contact.getContactId());
+						contacts.add(newContact);
+						return gson.toJson(newContact);
+					}
+				}
+				newContact = new Contact(contact);
+				contacts.add(newContact);
+				return gson.toJson(newContact);
+			}
+		}
+		throw new UserNotFoundException("User with Id "+userId+" does not exist");
+	}
+
+	@Override
+	public void deleteUser(String userId) {
+		for (User user : userList) {
+			if (user.getUserId().equals(userId)) {
+				userList.remove(user);
+				user = null;
+				return;
+			}
+		}
+		throw new UserNotFoundException("User with Id "+userId+" does not exist");
+	}
+
+	@Override
+	public void deleteUserContact(String userId, String contactId) {
+		for (User user : userList) {
+			if (user.getUserId().equals(userId)) {
+				for (Contact contact : user.getContactList()){
+					if (contact.getContactId().equals(contactId)){
+						List<Contact> contactList = user.getContactList();
+						contactList.remove(contact);
+						return;
+					}
+				}
+				throw new ContactNotFoundException("Contact with Id "+contactId+" does not exist");
+			}
+		}
+		throw new UserNotFoundException("User with Id "+userId+" does not exist");
+	}
 }
